@@ -1,0 +1,13 @@
+WIDTH=8;
+DEPTH=5;
+
+ADDRESS_RADIX=DEC;
+DATA_RADIX=DEC;
+
+CONTENT BEGIN
+	0  :   -001;
+	1  :   -001;
+	3  :   -001;
+	2  :   -001;
+	1  :   -001;
+END;
