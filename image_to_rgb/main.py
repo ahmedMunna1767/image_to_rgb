@@ -1,4 +1,5 @@
 from PIL import Image
+
 # Sanitize pixel value for pretty print
 def getValToWrite(pixel):
     if pixel < 10:
@@ -10,37 +11,35 @@ def getValToWrite(pixel):
     
     return valToWrite+" "
 
+# Write Pixel Values to file
+def writeToFile(imageWidth, file, pixels):
+    for i, pixel in enumerate(pixels):
+        if i % imageWidth == 0:
+            file.write('\n')
+        file.write(getValToWrite(pixel=pixel))
+    return
+
 # Separate red, green, blue pixel values into separate files
 def loadPixels():
     # Open Image file
-    myImage = Image.open("./emojiforfpgaresized.jpg", 'r')
-    imageHeight = myImage.size[0]
-    imageWidth = myImage.size[0]
+    with Image.open("./assests/emojiforfpgaresized.jpg", 'r') as myImage:
+        imageWidth = myImage.size[0]
+        redPixels = list(myImage.getdata(band=0))
+        greenPixels = list(myImage.getdata(band=1))
+        bluePixels = list(myImage.getdata(band=2))
 
-    # Open the pixel files
-    redFile = open('red.txt', 'w')
-    greenFile = open('green.txt', 'w')
-    blueFile = open('blue.txt', 'w')
+    # Write all the red values
+    with open('red.txt', 'w') as redFile:
+        writeToFile(imageWidth=imageWidth, file=redFile, pixels=redPixels)
 
-    # Gather pixels on separate lists
-    redPixels = list(myImage.getdata(band=0))
-    greenPixels = list(myImage.getdata(band=1))
-    bluePixels = list(myImage.getdata(band=2))
+    # Write all the green values
+    with open('green.txt', 'w') as greenFile:
+        writeToFile(imageWidth=imageWidth, file=greenFile, pixels=greenPixels)
 
-    # Write pixel values to files
-    for  i in range(imageHeight * imageWidth):
-        if i % imageWidth == 0:
-            redFile.write("\n")
-            greenFile.write("\n")
-            blueFile.write("\n")
-        redFile.write(getValToWrite(redPixels[i]))
-        greenFile.write(getValToWrite(greenPixels[i]))
-        blueFile.write(getValToWrite(bluePixels[i]))
-
-    # Close pixel files
-    redFile.close()
-    greenFile.close()
-    blueFile.close()
+    # Write all the blue values
+    with open('blue.txt', 'w') as blueFile:
+        writeToFile(imageWidth=imageWidth, file=blueFile, pixels=bluePixels)
+        
     return
 
 if __name__ == '__main__':
